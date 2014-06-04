@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import subprocess
 import os
@@ -443,9 +443,12 @@ class GitSvnExternal:
     def clone(self):
         """do the actual cloning"""
 
-        (module, branch) = re.search("(.*)/(trunk|branch.*|tag.*)", self.remote_url).groups()
-
-        if branch == self.remote_url:
+        if re.search(".*/(trunk|branch.*|tag.*)", self.remote_url):
+            (module, branch) = re.search("(.*)/(trunk|branch.*|tag.*)?", self.remote_url).groups()
+            if branch == self.remote_url:
+                branch = ""
+        else:
+            module = self.remote_url
             branch = ""
 
         # Default
@@ -714,4 +717,3 @@ if __name__ == '__main__':
         args += sys.argv[2:]
 
     handler(args)
-
